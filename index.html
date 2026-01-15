@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aditya weds Deepti - Wedding Invitation</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- Load Configuration First -->
+    <script src="config.js"></script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&family=Noto+Serif+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B4513;
+            --secondary: #DAA520;
+            --accent: #CD853F;
+            --gold: #D4AF37;
+            --cream: #FFF9F0;
+            --ivory: #FFFEF7;
+            --charcoal: #2C2C2C;
+            --light-gold: #F4E4C1;
+            
+            --font-heading: 'Playfair Display', serif;
+            --font-script: 'Cinzel', serif;
+            --font-body: 'Cormorant Garamond', serif;
+            --font-hindi: 'Noto Serif Devanagari', serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            color: var(--charcoal);
+            background: var(--cream);
+            overflow-x: hidden;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+            50% { text-shadow: 0 0 25px rgba(212, 175, 55, 0.8); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Logo */
+        .logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+            width: 120px;
+            height: 120px;
+            animation: fadeIn 1s ease-out, float 3s ease-in-out infinite 1s;
+            opacity: 0.95;
+            transition: all 0.3s ease;
+        }
+        
+        .logo.logo-hidden {
+            opacity: 0;
+            transform: translateY(-100px);
+            pointer-events: none;
+        }
+        
+        .logo:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .logo.logo-hidden:hover {
+            transform: translateY(-100px);
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.5));
+        }
+        
+        /* Countdown Timer - Fixed Bottom Left */
+        .countdown-container {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 999;
+            animation: fadeInUp 1s ease-out 2s both;
+        }
+        
+        .countdown {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-item {
+            text-align: center;
+            background: rgba(44, 44, 44, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid var(--gold);
+            min-width: 70px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .countdown-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            display: block;
+            font-family: var(--font-heading);
+        }
+        
+        .countdown-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.3rem;
+            color: white;
+            opacity: 0.9;
+        }
+        
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            z-index: 999;
+            background: rgba(44, 44, 44, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: fadeInUp 1s ease-out 2.5s both;
+        }
+        
+        .play-pause-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .play-pause-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .volume-control {
+            width: 80px;
+        }
+        
+        .volume-slider {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--gold);
+            cursor: pointer;
+        }
+        
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        /* RSVP Section */
+        .rsvp-section {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            text-align: center;
+        }
+        
+        .rsvp-form-container {
+            max-width: 600px;
+            margin: 3rem auto 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: var(--font-body);
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+        }
+        
+        .rsvp-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--gold);
+            color: var(--charcoal);
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .rsvp-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5);
+        }
+        
+        .form-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .form-message.success {
+            background: rgba(212, 237, 218, 0.9);
+            color: #155724;
+        }
+        
+        .form-message.error {
+            background: rgba(248, 215, 218, 0.9);
+            color: #721c24;
+        }
+        
+        /* Scroll to Top Button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.4);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.6);
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.95), rgba(205, 133, 63, 0.95));
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .nav.visible {
+            transform: translateY(0);
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+        
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        
+        .nav a:hover {
+            color: var(--gold);
+        }
+        
+        .nav a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: var(--cream); /* Fallback color */
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.8) 0%, rgba(205, 133, 63, 0.7) 100%);
+        }
+        
+        /* Fallback for missing images */
+        .hero:not([style*="background-image"]) .hero-overlay {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            opacity: 0.9;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            color: white;
+            padding: 2rem;
+            max-width: 1000px;
+            position: relative;
+        }
+        
+        .hero-ganesh {
+            font-family: var(--font-hindi);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            margin-bottom: 1.5rem;
+            animation: glow 3s ease-in-out infinite;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .hero-mantra {
+            font-family: var(--font-hindi);
+            font-size: clamp(1.2rem, 3vw, 2.2rem);
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out 0.3s both;
+            opacity: 0.95;
+            font-weight: 500;
+            line-height: 2;
+        }
+        
+        .hero-label {
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+        
+        .hero-names {
+            font-family: var(--font-script);
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+            animation: scaleIn 1s ease-out 0.9s both;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .hero-and {
+            font-family: var(--font-script);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            margin: 1.5rem 0;
+            opacity: 0.9;
+            text-transform: lowercase;
+        }
+        
+        .hero-divider {
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            margin: 2rem auto;
+            position: relative;
+            animation: fadeInUp 1s ease-out 1.2s both;
+        }
+        
+        .hero-divider::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--gold);
+            background: var(--primary);
+            padding: 0 10px;
+            font-size: 1.2rem;
+        }
+        
+        .hero-date {
+            font-size: clamp(1.3rem, 3vw, 2.2rem);
+            margin-bottom: 0.8rem;
+            animation: fadeInUp 1s ease-out 1.5s both;
+            font-weight: 500;
+        }
+        
+        .hero-venue {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-weight: 300;
+            animation: fadeInUp 1s ease-out 1.8s both;
+            opacity: 0.95;
+        }
+        
+        /* Families Section */
+        .families-section {
+            padding: 100px 20px;
+            background: linear-gradient(to bottom, var(--ivory), var(--cream));
+            position: relative;
+        }
+        
+        .families-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            background-size: cover;
+            background-position: center top;
+            opacity: 0.12;
+            z-index: 0;
+        }
+        
+        .families-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .families-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .family-card {
+            text-align: center;
+            padding: 3rem 2.5rem;
+            background: white;
+            border-radius: 20px;
+            border: 3px solid var(--light-gold);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        
+        .family-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+        
+        .family-card:hover::before {
+            animation: shimmer 1.5s ease;
+        }
+        
+        .family-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(139, 69, 19, 0.2);
+            border-color: var(--gold);
+        }
+        
+        .family-label {
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .family-name {
+            font-family: var(--font-heading);
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .family-relation {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .parent-name {
+            font-size: 1.3rem;
+            color: var(--charcoal);
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+        
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 4rem;
+            font-style: italic;
+        }
+        
+        /* Ceremony Full Screen Sections */
+        .ceremony-section {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: var(--charcoal); /* Fallback */
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .ceremony-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+        }
+        
+        /* Fallback overlay for missing ceremony images */
+        .ceremony-section:not([style*="background-image"]) .ceremony-overlay {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            opacity: 0.95;
+        }
+        
+        .ceremony-section:hover .ceremony-overlay {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        /* Vidaayi specific - show upper part */
+        .ceremony-section[data-ceremony="vidaayi"] {
+            background-position: center 30%;
+        }
+        
+        .ceremony-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            max-width: 900px;
+            transition: all 0.5s ease;
+        }
+        
+        .ceremony-section:hover .ceremony-content {
+            transform: scale(1.05);
+        }
+        
+        .ceremony-name {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin-bottom: 1rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .ceremony-date-time {
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+        
+        .ceremony-venue-info {
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .ceremony-description {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-style: italic;
+            opacity: 0.85;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 25px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 25px 100px rgba(0,0,0,0.5);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .modal-close:hover {
+            background: var(--accent);
+            transform: rotate(90deg);
+        }
+        
+        .modal-content {
+            padding: 3rem;
+        }
+        
+        .modal-title {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .modal-map {
+            margin-top: 2rem;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 350px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .modal-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .footer-mantra {
+            font-family: var(--font-hindi);
+            font-size: 1.6rem;
+            margin-bottom: 2rem;
+            line-height: 2.2;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .footer-families {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-copyright {
+            margin-top: 2rem;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 968px) {
+            .nav {
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .families-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .ceremony-section {
+                background-attachment: scroll;
+            }
+            
+            .hero {
+                background-attachment: scroll;
+            }
+            
+            .modal-content {
+                padding: 2rem 1.5rem;
+            }
+            
+            .countdown-container {
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+            }
+            
+            .countdown {
+                gap: 0.5rem;
+                justify-content: center;
+            }
+            
+            .countdown-item {
+                min-width: 60px;
+                padding: 10px 12px;
+            }
+            
+            .countdown-value {
+                font-size: 1.4rem;
+            }
+            
+            .countdown-label {
+                font-size: 0.6rem;
+            }
+            
+            .music-player {
+                bottom: 100px;
+                right: 20px;
+                left: auto;
+            }
+            
+            .scroll-to-top {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .logo {
+                width: 70px;
+                height: 70px;
+                top: 15px;
+                left: 15px;
+            }
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Indicator -->
+    <div id="loading" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #FFF9F0; display: flex; align-items: center; justify-content: center; z-index: 99999; font-family: 'Poppins', sans-serif;">
+        <div style="text-align: center;">
+            <div style="width: 60px; height: 60px; border: 5px solid #F4E4C1; border-top: 5px solid #8B4513; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+            <p style="color: #8B4513; font-size: 1.2rem;">Loading Wedding Invitation...</p>
+        </div>
+    </div>
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    
+    <div id="root"></div>
+    
+    <!-- Configuration -->
+    <script>
+        const WEDDING_CONFIG = {
+            couple: {
+                groom: {
+                    name: "Aditya Mani",
+                    mother: "Alka Katara",
+                    father: "Brajendra Kant Katara"
+                },
+                bride: {
+                    name: "Deepti",
+                    mother: "Shashi Prabha Upadhyaya",
+                    father: "Dr. Krishna Kant Upadhyaya"
+                }
+            },
+            wedding: {
+                date: "19th February 2026",
+                mainVenue: "The Grand Palm Court",
+                mainVenueAddress: "Address Line 1, City, State, PIN"
+            },
+            mantras: {
+                ganesh: "ॐ गं गणपतये नमः",
+                hero: "श्री गणेशाय नमः । शुभम् भवतु ।",
+                footer: "सर्वे भवन्तु सुखिनः । सर्वे सन्तु निरामयाः ।"
+            },
+            images: {
+                logo: "images/logo/ganesh-final.png",
+                hero: "images/hero/hero-bg.jpg",
+                familyGroup: "images/families/family-group.png",
+                families: {
+                    groomSide: "images/families/groom-side.jpg",
+                    brideSide: "images/families/bride-side.jpg"
+                },
+                ceremonies: {
+                    lagan: "images/ceremonies/lagan.png",
+                    baraat: "images/ceremonies/baraat.png",
+                    varmala: "images/ceremonies/varmala.png",
+                    pheras: "images/ceremonies/pheras-new.png",
+                    vidaayi: "images/ceremonies/vidaayi.png"
+                }
+            },
+            ceremonies: [
+                {
+                    id: "lagan",
+                    name: "Lagan (लगन)",
+                    date: "17th February 2026",
+                    time: "10:00 AM",
+                    venue: "Groom's Residence",
+                    venueAddress: "Address here",
+                    description: "Sacred engagement ceremony with family blessings and rituals",
+                    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215275390381!2d-73.98823492346471!3d40.74844097138558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1705340000000!5m2!1sen!2sus"
+                },
+                {
+                    id: "baraat",
+                    name: "Baraat (बारात)",
+                    date: "19th February 2026",
+                    time: "6:00 PM",
+                    venue: "Taj Signature",
+                    venueAddress: "Taj Signature Hotel Address",
+                    description: "The groom's grand procession with music, dance, and celebration",
+                    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215275390381!2d-73.98823492346471!3d40.74844097138558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1705340000000!5m2!1sen!2sus"
+                },
+                {
+                    id: "varmala",
+                    name: "Varmala (वरमाला)",
+                    date: "19th February 2026",
+                    time: "8:30 PM",
+                    venue: "The Grand Palm Court",
+                    venueAddress: "Grand Palm Court Address",
+                    description: "Exchange of garlands marking the sacred union of two souls",
+                    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215275390381!2d-73.98823492346471!3d40.74844097138558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1705340000000!5m2!1sen!2sus"
+                },
+                {
+                    id: "pheras",
+                    name: "Pheras (फेरे)",
+                    date: "19th February 2026",
+                    time: "10:00 PM",
+                    venue: "The Grand Palm Court",
+                    venueAddress: "Grand Palm Court Address",
+                    description: "Sacred seven vows around the holy fire, binding two souls forever",
+                    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215275390381!2d-73.98823492346471!3d40.74844097138558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1705340000000!5m2!1sen!2sus"
+                },
+                {
+                    id: "vidaayi",
+                    name: "Vidaayi (विदाई)",
+                    date: "20th February 2026",
+                    time: "5:00 AM",
+                    venue: "The Grand Palm Court",
+                    venueAddress: "Grand Palm Court Address",
+                    description: "Emotional farewell as the bride begins her new journey with love",
+                    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215275390381!2d-73.98823492346471!3d40.74844097138558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1705340000000!5m2!1sen!2sus"
+                }
+            ],
+            rsvp: {
+                enabled: true,
+                text: "We would be honored by your presence on this auspicious occasion.",
+                deadline: "Kindly confirm your attendance by 1st February 2026",
+                submitUrl: null
+            },
+            theme: {
+                primary: "#8B4513",
+                secondary: "#DAA520",
+                accent: "#CD853F",
+                gold: "#D4AF37"
+            }
+        };
+    </script>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const CONFIG = WEDDING_CONFIG;
+
+        // Logo Component
+        function Logo() {
+            const [hasError, setHasError] = useState(false);
+            const [visible, setVisible] = useState(true);
+            const [lastScrollY, setLastScrollY] = useState(0);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    const currentScrollY = window.scrollY;
+                    
+                    // Show logo only at top of page
+                    if (currentScrollY < 50) {
+                        setVisible(true);
+                    } else {
+                        setVisible(false);
+                    }
+                    
+                    setLastScrollY(currentScrollY);
+                };
+                
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, [lastScrollY]);
+            
+            if (hasError || !CONFIG.images.logo) {
+                return null;
+            }
+            
+            return (
+                <div className={`logo ${visible ? '' : 'logo-hidden'}`}>
+                    <img 
+                        src={CONFIG.images.logo} 
+                        alt="Wedding Logo"
+                        onError={() => setHasError(true)}
+                    />
+                </div>
+            );
+        }
+
+        // Visitor Counter
+        function VisitorCounter() {
+            const [count, setCount] = useState(0);
+
+            useEffect(() => {
+                let visitors = localStorage.getItem('weddingVisitors');
+                if (!visitors) {
+                    visitors = Math.floor(Math.random() * 500) + 100;
+                } else {
+                    visitors = parseInt(visitors) + 1;
+                }
+                localStorage.setItem('weddingVisitors', visitors);
+                setCount(visitors);
+            }, []);
+
+            return (
+                <div className="visitor-counter">
+                    👥 Visits: <span className="visitor-count">{count}</span>
+                </div>
+            );
+        }
+
+        // Navigation
+        function Navigation() {
+            const [visible, setVisible] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setVisible(window.scrollY > 300);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <nav className={`nav ${visible ? 'visible' : ''}`}>
+                    <a href="#families">Families</a>
+                    <a href="#ceremonies">Ceremonies</a>
+                    <a href="#rsvp">RSVP</a>
+                    <a href="#footer">Contact</a>
+                </nav>
+            );
+        }
+
+        // Hero
+        function Hero() {
+            const heroStyle = CONFIG.images.hero ? {
+                backgroundImage: `url(${CONFIG.images.hero})`
+            } : {};
+            
+            return (
+                <section className="hero" style={heroStyle}>
+                    <div className="hero-overlay"></div>
+                    <div className="hero-content">
+                        {CONFIG.mantras.ganesh && <div className="hero-ganesh">{CONFIG.mantras.ganesh}</div>}
+                        {CONFIG.mantras.ganeshFull && (
+                            <div className="hero-mantra" style={{whiteSpace: 'pre-line'}}>
+                                {CONFIG.mantras.ganeshFull}
+                            </div>
+                        )}
+                        {CONFIG.mantras.hero && <div className="hero-mantra">{CONFIG.mantras.hero}</div>}
+                        <div className="hero-label">{CONFIG.hero.label}</div>
+                        <h1 className="hero-names">
+                            {CONFIG.couple.groom.name}
+                            <div className="hero-and">{CONFIG.hero.conjunction}</div>
+                            {CONFIG.couple.bride.name}
+                        </h1>
+                        <div className="hero-divider"></div>
+                        <div className="hero-date">{CONFIG.wedding.date}</div>
+                        <div className="hero-venue">{CONFIG.wedding.mainVenue}</div>
+                    </div>
+                </section>
+            );
+        }
+
+        // Families
+        function Families() {
+            return (
+                <section id="families" className="families-section">
+                    <div className="families-background" style={{backgroundImage: `url(${CONFIG.images.familyGroup})`}}></div>
+                    <div className="families-content">
+                        <h2 className="section-title reveal">{CONFIG.sections.families.title}</h2>
+                        <p className="section-subtitle reveal">{CONFIG.sections.families.subtitle}</p>
+                        
+                        <div className="families-grid">
+                            <div className="family-card reveal">
+                                <div className="family-label">{CONFIG.sections.families.groomLabel}</div>
+                                <div className="family-name">{CONFIG.couple.groom.name}</div>
+                                <div className="family-relation">{CONFIG.sections.families.groomRelation}</div>
+                                <div className="parent-name">Mrs. {CONFIG.couple.groom.mother}</div>
+                                <div style={{margin: '0.5rem 0', color: '#999'}}>and</div>
+                                <div className="parent-name">Mr. {CONFIG.couple.groom.father}</div>
+                            </div>
+                            
+                            <div className="family-card reveal">
+                                <div className="family-label">{CONFIG.sections.families.brideLabel}</div>
+                                <div className="family-name">{CONFIG.couple.bride.name}</div>
+                                <div className="family-relation">{CONFIG.sections.families.brideRelation}</div>
+                                <div className="parent-name">Mrs. {CONFIG.couple.bride.mother}</div>
+                                <div style={{margin: '0.5rem 0', color: '#999'}}>and</div>
+                                <div className="parent-name">{CONFIG.couple.bride.father}</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        // Ceremony Modal
+        function CeremonyModal({ ceremony, onClose }) {
+            if (!ceremony) return null;
+
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close" onClick={onClose}>×</button>
+                        <div className="modal-content">
+                            <h2 className="modal-title">{ceremony.name}</h2>
+                            <p style={{textAlign: 'center', fontSize: '1.2rem', color: '#666', marginBottom: '1rem'}}>
+                                {ceremony.date} • {ceremony.time}
+                            </p>
+                            <p style={{textAlign: 'center', fontSize: '1.1rem', color: '#8B4513', fontWeight: '600', marginBottom: '1rem'}}>
+                                {ceremony.venue}
+                            </p>
+                            <p style={{textAlign: 'center', fontSize: '1rem', color: '#777', fontStyle: 'italic', marginBottom: '2rem'}}>
+                                {ceremony.description}
+                            </p>
+                            <div className="modal-map">
+                                <iframe
+                                    src={ceremony.mapUrl}
+                                    allowFullScreen=""
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                ></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Ceremonies
+        function Ceremonies() {
+            const [selectedCeremony, setSelectedCeremony] = useState(null);
+            
+            const getCeremonyStyle = (ceremonyId) => {
+                const imagePath = CONFIG.images.ceremonies[ceremonyId];
+                return imagePath ? { backgroundImage: `url(${imagePath})` } : {};
+            };
+
+            return (
+                <div id="ceremonies">
+                    {CONFIG.ceremonies.map((ceremony) => (
+                        <section
+                            key={ceremony.id}
+                            className="ceremony-section"
+                            data-ceremony={ceremony.id}
+                            style={getCeremonyStyle(ceremony.id)}
+                            onClick={() => setSelectedCeremony(ceremony)}
+                        >
+                            <div className="ceremony-overlay"></div>
+                            <div className="ceremony-content">
+                                <h2 className="ceremony-name">{ceremony.name}</h2>
+                                <div className="ceremony-date-time">
+                                    {ceremony.date} • {ceremony.time}
+                                </div>
+                                <div className="ceremony-venue-info">{ceremony.venue}</div>
+                                <div className="ceremony-description">{ceremony.description}</div>
+                            </div>
+                        </section>
+                    ))}
+                    {selectedCeremony && (
+                        <CeremonyModal 
+                            ceremony={selectedCeremony} 
+                            onClose={() => setSelectedCeremony(null)} 
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        // RSVP Modal
+        function RSVPModal({ onClose }) {
+            const [formData, setFormData] = useState({ name: '', phone: '' });
+            const [message, setMessage] = useState({ text: '', type: '' });
+            const [isSubmitting, setIsSubmitting] = useState(false);
+
+            const handleChange = (e) => {
+                setFormData({ ...formData, [e.target.name]: e.target.value });
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                
+                if (!formData.name.trim() || !formData.phone.trim()) {
+                    setMessage({ text: 'Please fill in all fields', type: 'error' });
+                    setIsSubmitting(false);
+                    return;
+                }
+
+                const phoneRegex = /^[0-9]{10}$/;
+                if (!phoneRegex.test(formData.phone.replace(/[-\s]/g, ''))) {
+                    setMessage({ text: 'Please enter a valid 10-digit phone number', type: 'error' });
+                    setIsSubmitting(false);
+                    return;
+                }
+
+                setTimeout(() => {
+                    const rsvps = JSON.parse(localStorage.getItem('weddingRSVPs') || '[]');
+                    rsvps.push({ ...formData, timestamp: new Date().toISOString() });
+                    localStorage.setItem('weddingRSVPs', JSON.stringify(rsvps));
+
+                    setMessage({ 
+                        text: '🎉 Thank you! Your attendance has been confirmed. We look forward to celebrating with you!', 
+                        type: 'success' 
+                    });
+                    setFormData({ name: '', phone: '' });
+                    setIsSubmitting(false);
+                    
+                    setTimeout(() => onClose(), 3000);
+                }, 1000);
+            };
+
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close" onClick={onClose}>×</button>
+                        <div className="modal-content">
+                            <h2 className="modal-title">Confirm Your Attendance</h2>
+                            <p style={{textAlign: 'center', fontSize: '1.1rem', color: '#666', marginBottom: '1rem'}}>
+                                {CONFIG.rsvp.text}
+                            </p>
+                            <p style={{textAlign: 'center', fontSize: '0.95rem', color: '#8B4513', fontWeight: '600'}}>
+                                {CONFIG.rsvp.deadline}
+                            </p>
+                            
+                            <form className="rsvp-form" onSubmit={handleSubmit}>
+                                <div className="form-group">
+                                    <label htmlFor="name">Full Name *</label>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        placeholder="Enter your full name"
+                                        required
+                                    />
+                                </div>
+                                
+                                <div className="form-group">
+                                    <label htmlFor="phone">Phone Number *</label>
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                        placeholder="10-digit mobile number"
+                                        required
+                                    />
+                                </div>
+                                
+                                <button type="submit" className="rsvp-submit" disabled={isSubmitting}>
+                                    {isSubmitting ? 'Submitting...' : 'Confirm Attendance'}
+                                </button>
+                                
+                                {message.text && (
+                                    <div className={`form-message ${message.type}`}>
+                                        {message.text}
+                                    </div>
+                                )}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Countdown Timer Component
+        function CountdownTimer() {
+            const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+            
+            useEffect(() => {
+                const weddingDate = new Date(CONFIG.wedding.dateForCountdown).getTime();
+                
+                const updateCountdown = () => {
+                    const now = new Date().getTime();
+                    const distance = weddingDate - now;
+                    
+                    if (distance > 0) {
+                        setCountdown({
+                            days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                            hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                            minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                            seconds: Math.floor((distance % (1000 * 60)) / 1000)
+                        });
+                    }
+                };
+                
+                updateCountdown();
+                const interval = setInterval(updateCountdown, 1000);
+                return () => clearInterval(interval);
+            }, []);
+            
+            if (!CONFIG.features.countdown) return null;
+            
+            return (
+                <div className="countdown-container">
+                    <div className="countdown">
+                        <div className="countdown-item">
+                            <span className="countdown-value">{countdown.days}</span>
+                            <span className="countdown-label">Days</span>
+                        </div>
+                        <div className="countdown-item">
+                            <span className="countdown-value">{countdown.hours}</span>
+                            <span className="countdown-label">Hours</span>
+                        </div>
+                        <div className="countdown-item">
+                            <span className="countdown-value">{countdown.minutes}</span>
+                            <span className="countdown-label">Mins</span>
+                        </div>
+                        <div className="countdown-item">
+                            <span className="countdown-value">{countdown.seconds}</span>
+                            <span className="countdown-label">Secs</span>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // RSVP Section
+        function RSVPSection() {
+            const [formData, setFormData] = useState({ name: '', phone: '', side: 'groom' });
+            const [message, setMessage] = useState({ text: '', type: '' });
+            const [isSubmitting, setIsSubmitting] = useState(false);
+
+            const handleChange = (e) => {
+                setFormData({ ...formData, [e.target.name]: e.target.value });
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                
+                if (!formData.name.trim() || !formData.phone.trim()) {
+                    setMessage({ text: CONFIG.sections.rsvp.errorRequired, type: 'error' });
+                    setIsSubmitting(false);
+                    return;
+                }
+
+                const phoneRegex = /^[0-9]{10}$/;
+                if (!phoneRegex.test(formData.phone.replace(/[-\s]/g, ''))) {
+                    setMessage({ text: CONFIG.sections.rsvp.errorPhone, type: 'error' });
+                    setIsSubmitting(false);
+                    return;
+                }
+
+                setTimeout(() => {
+                    const rsvps = JSON.parse(localStorage.getItem('weddingRSVPs') || '[]');
+                    rsvps.push({ ...formData, timestamp: new Date().toISOString() });
+                    localStorage.setItem('weddingRSVPs', JSON.stringify(rsvps));
+
+                    setMessage({ 
+                        text: CONFIG.sections.rsvp.successMessage, 
+                        type: 'success' 
+                    });
+                    setFormData({ name: '', phone: '', side: 'groom' });
+                    setIsSubmitting(false);
+                }, 1000);
+            };
+            
+            if (!CONFIG.features.rsvp) return null;
+
+            return (
+                <section id="rsvp" className="rsvp-section">
+                    <h2 className="section-title" style={{color: 'white'}}>{CONFIG.sections.rsvp.title}</h2>
+                    <p className="section-subtitle" style={{color: 'rgba(255,255,255,0.9)'}}>
+                        {CONFIG.sections.rsvp.subtitle}
+                    </p>
+                    
+                    <div className="rsvp-form-container">
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label htmlFor="name">{CONFIG.sections.rsvp.nameLabel}</label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder={CONFIG.sections.rsvp.namePlaceholder}
+                                    required
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label htmlFor="phone">{CONFIG.sections.rsvp.phoneLabel}</label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder={CONFIG.sections.rsvp.phonePlaceholder}
+                                    required
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label htmlFor="side">{CONFIG.sections.rsvp.sideLabel}</label>
+                                <select
+                                    id="side"
+                                    name="side"
+                                    value={formData.side}
+                                    onChange={handleChange}
+                                    required
+                                    style={{
+                                        width: '100%',
+                                        padding: '14px 18px',
+                                        border: '2px solid rgba(255, 255, 255, 0.3)',
+                                        borderRadius: '12px',
+                                        fontSize: '1rem',
+                                        fontFamily: 'var(--font-body)',
+                                        background: 'rgba(255, 255, 255, 0.9)',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <option value="groom">{CONFIG.sections.rsvp.groomSideOption}</option>
+                                    <option value="bride">{CONFIG.sections.rsvp.brideSideOption}</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" className="rsvp-submit" disabled={isSubmitting}>
+                                {isSubmitting ? CONFIG.sections.rsvp.submittingButton : CONFIG.sections.rsvp.submitButton}
+                            </button>
+                            
+                            {message.text && (
+                                <div className={`form-message ${message.type}`}>
+                                    {message.text}
+                                </div>
+                            )}
+                        </form>
+                    </div>
+                </section>
+            );
+        }
+
+        // Confetti Component
+        function Confetti() {
+            useEffect(() => {
+                const canvas = document.getElementById('confetti-canvas');
+                if (!canvas) return;
+                
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                const confetti = [];
+                const colors = ['#DAA520', '#D4AF37', '#CD853F', '#FF6B6B', '#FFA500'];
+                
+                for (let i = 0; i < 150; i++) {
+                    confetti.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height - canvas.height,
+                        r: Math.random() * 6 + 2,
+                        d: Math.random() * 3 + 1,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        tilt: Math.random() * 10 - 10,
+                        tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+                        tiltAngle: 0
+                    });
+                }
+                
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    confetti.forEach((c, i) => {
+                        ctx.beginPath();
+                        ctx.lineWidth = c.r / 2;
+                        ctx.strokeStyle = c.color;
+                        ctx.moveTo(c.x + c.tilt + c.r, c.y);
+                        ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r);
+                        ctx.stroke();
+                        
+                        c.tiltAngle += c.tiltAngleIncremental;
+                        c.y += (Math.cos(c.d) + 1 + c.r / 2) / 2;
+                        c.x += Math.sin(c.d);
+                        c.tilt = Math.sin(c.tiltAngle - i / 3) * 15;
+                        
+                        if (c.y > canvas.height) {
+                            confetti[i] = {
+                                x: Math.random() * canvas.width,
+                                y: -20,
+                                r: c.r,
+                                d: c.d,
+                                color: c.color,
+                                tilt: c.tilt,
+                                tiltAngleIncremental: c.tiltAngleIncremental,
+                                tiltAngle: c.tiltAngle
+                            };
+                        }
+                    });
+                    requestAnimationFrame(draw);
+                }
+                
+                setTimeout(() => draw(), 1000);
+                
+                window.addEventListener('resize', () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                });
+            }, []);
+            
+            return <canvas id="confetti-canvas"></canvas>;
+        }
+
+        // Music Player
+        function MusicPlayer() {
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [volume, setVolume] = useState(30);
+            const audioRef = React.useRef(null);
+            
+            useEffect(() => {
+                audioRef.current = new Audio('https://www.bensound.com/bensound-music/bensound-ukulele.mp3');
+                audioRef.current.loop = true;
+                audioRef.current.volume = volume / 100;
+                
+                return () => {
+                    if (audioRef.current) {
+                        audioRef.current.pause();
+                    }
+                };
+            }, []);
+            
+            useEffect(() => {
+                if (audioRef.current) {
+                    audioRef.current.volume = volume / 100;
+                }
+            }, [volume]);
+            
+            const togglePlay = () => {
+                if (isPlaying) {
+                    audioRef.current.pause();
+                } else {
+                    audioRef.current.play();
+                }
+                setIsPlaying(!isPlaying);
+            };
+            
+            return (
+                <div className="music-player">
+                    <button className="play-pause-btn" onClick={togglePlay}>
+                        {isPlaying ? '⏸️' : '▶️'}
+                    </button>
+                    <div className="volume-control">
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={volume}
+                            onChange={(e) => setVolume(e.target.value)}
+                            className="volume-slider"
+                        />
+                    </div>
+                </div>
+            );
+        }
+
+        // Scroll to Top Button
+        function ScrollToTop() {
+            const [visible, setVisible] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setVisible(window.scrollY > 500);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const scrollToTop = () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            return (
+                <button 
+                    className={`scroll-to-top ${visible ? 'visible' : ''}`}
+                    onClick={scrollToTop}
+                    aria-label="Scroll to top"
+                >
+                    ↑
+                </button>
+            );
+        }
+
+        // Footer
+        function Footer() {
+            return (
+                <footer id="footer">
+                    <div className="footer-mantra">{CONFIG.mantras.footer}</div>
+                    <p>{CONFIG.footer.blessingsText}</p>
+                    <div className="footer-families">
+                        The {CONFIG.couple.groom.father.split(' ').pop()} & {CONFIG.couple.bride.father.split(' ').pop()} Families
+                    </div>
+                    <p className="footer-copyright">{CONFIG.footer.copyrightText}</p>
+                    <div style={{marginTop: '1rem', fontSize: '0.9rem', opacity: 0.7}}>
+                        {CONFIG.footer.developedBy} • <a href={`mailto:${CONFIG.footer.developerEmail}`} style={{color: 'var(--gold)', textDecoration: 'none'}}>{CONFIG.footer.developerEmail}</a>
+                    </div>
+                </footer>
+            );
+        }
+
+        // Main App
+        function App() {
+            useEffect(() => {
+                // Hide loading screen
+                const loadingElement = document.getElementById('loading');
+                if (loadingElement) {
+                    setTimeout(() => {
+                        loadingElement.style.display = 'none';
+                    }, 500);
+                }
+                
+                const reveals = document.querySelectorAll('.reveal');
+                
+                const revealOnScroll = () => {
+                    reveals.forEach(element => {
+                        const elementTop = element.getBoundingClientRect().top;
+                        const elementVisible = 100;
+                        
+                        if (elementTop < window.innerHeight - elementVisible) {
+                            element.classList.add('active');
+                        }
+                    });
+                };
+
+                window.addEventListener('scroll', revealOnScroll);
+                revealOnScroll();
+                
+                return () => window.removeEventListener('scroll', revealOnScroll);
+            }, []);
+
+            return (
+                <>
+                    <Confetti />
+                    <Logo />
+                    <Navigation />
+                    <Hero />
+                    <Families />
+                    <Ceremonies />
+                    <RSVPSection />
+                    <Footer />
+                    <CountdownTimer />
+                    <MusicPlayer />
+                    <ScrollToTop />
+                </>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
